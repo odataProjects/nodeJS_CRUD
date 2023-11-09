@@ -23,7 +23,7 @@
 
     - name: Create database if it does not exist
       when: database_exists.changed
-      command: mysql -u ks -p{{ ks }} nodeJenkins < database.sql    
+      command: mysql -u root -p{{ }} nodeJenkins < database.sql    
       args:
         chdir: /home/thyler/odataProjects/nodeJS_CRUD
     
@@ -44,8 +44,9 @@
     - name: Reload systemd
       systemd:
         daemon_reload: yes
-    
-    - name: Restart service
-      systemd:
-        name: nodeJS_CRUD
-        state: restarted
+
+  tasks:
+  - name: Restart service
+    systemd:
+      name: nodeJS_CRUD
+      state: restarted
