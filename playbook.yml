@@ -8,6 +8,7 @@
       git:
         repo: https://github.com/odataProjects/nodeJS_CRUD.git
         dest: /home/thyler/odataProjects/nodeJS_CRUD
+        version: main
 
     - name: Install Node.js dependencies
       command: npm install
@@ -21,7 +22,7 @@
       register: database_exists
 
     - name: Create database if it does not exist
-      when: database_exists.rc == 1
+      when: database_exists.changed
       command: mysql -u ks -p{{ ks }} nodeJenkins < database.sql    
       args:
         chdir: /home/thyler/odataProjects/nodeJS_CRUD
