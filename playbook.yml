@@ -1,0 +1,50 @@
+---
+- name: Clone Repository and Configure Node.js App
+  hosts: nodejs_servers
+  become: yes
+
+  tasks:
+    - name: Clone Git Repository
+      git:
+        repo: https://github.com/odataProjects/nodeJS_CRUD.git
+        dest: /home/thyler/odataProjects/nodeJS_CRUD
+
+    - name: Install Node.js dependencies
+      command: npm install
+      args:
+        chdir: /home/thyler/odataProjects/nodeJS_CRUD
+        
+    - name: Check if database exists
+      mysql_db:
+        name: nodeJenkins
+        state: present
+      register: database_exists
+
+    - name: Create database if it does not exist
+      when: database_exists.rc == 1
+      command: mysql -u ks -p{{ ks }} nodeJenkins < database.sql    
+      args:
+        chdir: /home/thyler/odataProjects/nodeJS_CRUD
+    
+    - name: Create service file
+      template:
+        src: nodeJS_CRUD.j2  
+        dest: /etc/systemd/system/nodeJS_CRUD.service
+      notify:
+        - Reload systemd
+
+    - name: Start and enable service
+      systemd:
+        name: nodeJS_CRUD
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+    
+    - name: Restart service
+      systemd:
+        name: nodeJS_CRUD
+        state: restarted

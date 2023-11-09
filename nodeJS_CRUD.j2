@@ -1,0 +1,12 @@
+[Unit]
+Description=Your Service Description
+
+[Service]
+ExecStart=/usr/bin/node index.js
+User=root
+Group=root
+WorkingDirectory=/home/thyler/odataProjects/nodeJS_CRUD
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
