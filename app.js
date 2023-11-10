@@ -29,7 +29,7 @@ app.post('/inEmployee', (req, res) => {
 app.get('/listEmployees', (req, res) => {
     conn.query('SELECT * FROM Employee', (err, results) => {
         if (err) {
-            //console.error('Error executing query:', err);
+            console.error('Error executing query:', err);
             return;
         }
         res.send(results)

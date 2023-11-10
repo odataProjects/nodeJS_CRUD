@@ -14,7 +14,7 @@
       command: npm install
       args:
         chdir: /home/thyler/odataProjects/nodeJS_CRUD
-        
+
     - name: Check if database exists
       mysql_db:
         name: nodeJenkins
@@ -47,6 +47,11 @@
         state: restarted
       notify:
         - Reload systemd
+
+    - name: Copy .env.server to .env
+      copy:
+        src: .env.server
+        dest: .env
 
   handlers:
     - name: Reload systemd
