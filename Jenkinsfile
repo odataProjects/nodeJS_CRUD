@@ -38,13 +38,13 @@ pipeline {
     success {
       emailext body: 'The pipeline succeeded. Here is the link to the build: https://odata1060.serveo.net',
                subject: 'Pipeline Success',
-               to: 'thierrymichael1711@gmail.com',
+               to: 'odataprojects@gmail.com',
                from: 'nalyvalisoa0510@gmail.com'
     }
     failure {
       emailext body: 'The pipeline failed. Please check the Jenkins console output for details: https://jenkins_ks.serveo.net/job/$PROJECT_NAME/$BUILD_NUMBER/console',
                subject: 'Pipeline Failure',
-               to: 'thierrymichael1711@gmail.com',
+               to: 'odataprojects@gmail.com',
                from: 'nalyvalisoa0510@gmail.com'
     }
   }
