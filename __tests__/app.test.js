@@ -35,7 +35,6 @@ describe('Employee Management System', () => {
 
                 conn.query('SELECT LAST_INSERT_ID() as insertId', (err, results) => {
                     if (err) {
-                        console.error('Error executing query:', err);
                         done(err);
                         return;
                     }
