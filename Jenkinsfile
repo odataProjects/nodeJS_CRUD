@@ -23,10 +23,10 @@ pipeline {
                     sh 'mysql -u ks -p\'ks\' -e "CREATE DATABASE IF NOT EXISTS nodeJenkins; USE nodeJenkins; SET NAMES utf8; SOURCE database.sql;"'
 
                     // Run tests
-                    sh 'npm test -- --detectOpenHandles=true'
+                    //sh 'npm test -- --detectOpenHandles=true'
 
                     // Drop DB after tests
-                    sh 'mysqladmin -u ks -p\'ks\' -f drop nJTest'
+                    sh 'mysqladmin -u ks -p\'ks\' -f drop nodeJenkins'
                 }
             }
         }

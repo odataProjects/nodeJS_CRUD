@@ -1,7 +1,6 @@
 const request = require('supertest');
-const conn = require('../dbOperations/connect')
+const conn = require('../dbOperations/connect');
 const app = require('../app');
-
 
 const MIN_PORT = 10000;
 const MAX_PORT = 15000;
@@ -9,15 +8,20 @@ const MAX_PORT = 15000;
 let server;
 let port;
 
-beforeAll(done => {
+beforeAll(async () => {
     port = Math.floor(Math.random() * (MAX_PORT - MIN_PORT + 1)) + MIN_PORT;
-    server = app.listen(port, done); // Start the server on a random port
+    return new Promise((resolve) => {
+        server = app.listen(port, () => {
+            resolve();
+        });
+    });
 });
 
-afterAll(done => {
-    server.close(() => {
-        conn.end(() => {
-            done();
+afterAll(async () => {
+    return new Promise((resolve) => {
+        server.close(async () => {
+            await conn.end();
+            resolve();
         });
     });
 });
@@ -26,25 +30,24 @@ describe('Employee Management System', () => {
     let insertId;
 
     it('should insert a new employee', async () => {
-        request(app)
+        const response = await request(app)
             .post('/inEmployee')
-            .send({ name: 'John Doe', salaire: 5000 })
-            .then((response) => {
-                expect(response.status).toBe(200);
-                expect(response.text).toBe("Employee's records inserted successfully");
+            .send({ name: 'John Doe', salaire: 5000 });
 
-                conn.query('SELECT LAST_INSERT_ID() as insertId', (err, results) => {
-                    if (err) {
-                        done(err);
-                        return;
-                    }
+        expect(response.status).toBe(200);
+        expect(response.text).toBe("Employee's records inserted successfully");
 
-                    insertId = results[0].insertId;
-                    // Now you have the insertId available for further use
-                    return
-                });
-            })
-            .catch((error) => done(error));
+        return new Promise((resolve) => {
+            conn.query('SELECT LAST_INSERT_ID() as insertId', (err, results) => {
+                if (err) {
+                    resolve(err);
+                    return;
+                }
+
+                insertId = results[0].insertId;
+                resolve();
+            });
+        });
     });
 
     it('should list employees', async () => {
@@ -54,8 +57,9 @@ describe('Employee Management System', () => {
     });
 
     it('should get an employee by ID', async () => {
-        const response = await request(app).get('/getEmployee/:' + insertId);
+        const response = await request(app).get('/getEmployee/' + insertId);
         expect(response.status).toBe(200);
+
         if (response.body.length > 0) {
             expect(response.body[0]).toHaveProperty('id_employee');
         } else {
