@@ -20,7 +20,7 @@ afterAll(done => {
 describe('Employee Management System', () => {
     let insertId;
 
-    /*it('should insert a new employee', async () => {
+    it('should insert a new employee', async () => {
         request(app)
             .post('/inEmployee')
             .send({ name: 'John Doe', salaire: 5000 })
@@ -41,7 +41,7 @@ describe('Employee Management System', () => {
                 });
             })
             .catch((error) => done(error));
-    });*/
+    });
 
     it('should list employees', async () => {
         const response = await request(app).get('/listEmployees');

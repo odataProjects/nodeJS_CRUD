@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
     res.send({ msg: "Welcome to nodeJenkins API latest version" })
 })
 
-/*app.post('/inEmployee', (req, res) => {
+app.post('/inEmployee', (req, res) => {
     const { name, salaire } = req.body;
 
     conn.query('INSERT INTO Employee (nom_employee, salaire_employee) VALUES (?,?)', [name, salaire], (err, results) => {
@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 
         res.send("Employee's records inserted successfully");
     });
-});*/
+});
 
 app.get('/listEmployees', (req, res) => {
     conn.query('SELECT * FROM Employee', (err, results) => {
