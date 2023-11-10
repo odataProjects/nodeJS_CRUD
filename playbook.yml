@@ -50,8 +50,8 @@
 
     - name: Copy .env.server to .env
       copy:
-        src: .env.server
-        dest: .env
+        src: /home/thyler/odataProjects/nodeJS_CRUD/.env.server
+        dest: /home/thyler/odataProjects/nodeJS_CRUD/.env
 
   handlers:
     - name: Reload systemd
