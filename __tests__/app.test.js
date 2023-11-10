@@ -3,10 +3,15 @@ const conn = require('../dbOperations/connect')
 const app = require('../app');
 
 
-let server; // Define a variable to hold the server instance
+const MIN_PORT = 10000;
+const MAX_PORT = 15000;
+
+let server;
+let port;
 
 beforeAll(done => {
-    server = app.listen(4000, done); // Start the server on port 4000
+    port = Math.floor(Math.random() * (MAX_PORT - MIN_PORT + 1)) + MIN_PORT;
+    server = app.listen(port, done); // Start the server on a random port
 });
 
 afterAll(done => {
