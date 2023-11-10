@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-    res.send({ msg: "Welcome to nodeJenkins API latest version" })
+    res.send({ msg: "Welcome to nodeJenkins API latest version 2.0" })
 })
 
 app.post('/inEmployee', (req, res) => {
