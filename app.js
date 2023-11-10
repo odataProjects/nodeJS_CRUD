@@ -18,6 +18,7 @@ app.post('/inEmployee', (req, res) => {
 
     conn.query('INSERT INTO Employee (nom_employee, salaire_employee) VALUES (?,?)', [name, salaire], (err, results) => {
         if (err) {
+            console.error('Error executing query:', err);
             return res.send('Error inserting employee');
         }
 
@@ -28,7 +29,8 @@ app.post('/inEmployee', (req, res) => {
 app.get('/listEmployees', (req, res) => {
     conn.query('SELECT * FROM Employee', (err, results) => {
         if (err) {
-            return res.send('Error getting employees');
+            console.error('Error executing query:', err);
+            return;
         }
         res.send(results)
     });
@@ -38,7 +40,8 @@ app.get('/getEmployee/:id', (req, res) => {
     const id = req.params.id;
     conn.query('SELECT * FROM Employee where id_employee = ?', [id], (err, results) => {
         if (err) {
-            return res.send('Error getting an employee');
+            console.error('Error executing query:', err);
+            return;
         }
         res.send(results)
     });
@@ -49,6 +52,7 @@ app.post('/modEmployee', (req, res) => {
 
     conn.query('UPDATE Employee SET nom_employee = ?, salaire_employee = ? WHERE id_employee = ?', [newName, newSalaire, id], (err, results) => {
         if (err) {
+            console.error('Error executing query:', err);
             return res.send('Error updating employee');
         }
 
@@ -62,6 +66,7 @@ app.delete('/delEmployee/:id', (req, res) => {
 
     conn.query('DELETE FROM Employee WHERE id_employee = ?', [employeeId], (err, results) => {
         if (err) {
+            console.error('Error executing query:', err);
             return res.status(500).send('Error deleting employee');
         }
 
@@ -74,7 +79,8 @@ app.delete('/delEmployee/:id', (req, res) => {
 app.get('/getSalaire', (req, res) => {
     conn.query('SELECT MAX(salaire_employee) as max, MIN(salaire_employee) as min FROM Employee', (err, results) => {
         if (err) {
-            return res.send('Error getting values');
+            console.error('Error executing query:', err);
+            return;
         }
         res.send(results)
     });
