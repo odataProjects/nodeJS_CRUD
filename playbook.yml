@@ -28,8 +28,6 @@
         state: import
         target: /home/thyler/odataProjects/nodeJS_CRUD/database.sql
 
-
-    
     - name: Create service file
       template:
         src: nodeJS_CRUD.j2  
@@ -43,12 +41,14 @@
         enabled: yes
         state: started
 
+    - name: Restart service after daemon_reload
+      systemd:
+        name: nodeJS_CRUD
+        state: restarted
+      notify:
+        - Reload systemd
+
   handlers:
     - name: Reload systemd
       systemd:
         daemon_reload: yes
-
-    - name: Restart service
-      systemd:
-        name: nodeJS_CRUD
-        state: restarted
