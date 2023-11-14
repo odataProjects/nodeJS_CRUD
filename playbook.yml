@@ -1,14 +1,14 @@
 ---
-- name: Clone Repository and Configure Node.js App
+- name: Configure Node.js App
   hosts: nodejs_servers
   become: yes
 
   tasks:
-    - name: Copy from WorkSpace to odataProjects
+    - name: Copy files from Jenkins workspace to odataProjects
       copy:
         src: /var/lib/jenkins/workspace/nodeJS_CRUD
         dest: /home/thyler/odataProjects/
-        #remote_src: true
+        remote_src: true
 
     - name: Create service file
       template:
@@ -18,26 +18,12 @@
         - Reload systemd
         - Restart service
 
-    - name: Check if database exists
-      mysql_db:
-        name: nodeJenkins
-        state: present
-      register: database_exists
-
-    - name: Create database if it does not exist
-      when: database_exists.changed
-      mysql_db:
-        name: nodeJenkins
-        state: import
-        target: /home/thyler/odataProjects/nodeJS_CRUD/database.sql
-
     - name: Start and enable service
       systemd:
         name: nodeJS_CRUD
         enabled: yes
         state: started
 
-  handlers:
     - name: Reload systemd
       systemd:
         daemon_reload: yes
@@ -47,8 +33,21 @@
         name: nodeJS_CRUD
         state: restarted
 
-    - name: Copy .env.server to .env
+    - name: Check if the database exists
+      mysql_db:
+        name: nodeJenkins
+        state: present
+      register: database_exists
+
+    - name: Import database if it does not exist
+      when: database_exists.changed
+      mysql_db:
+        name: nodeJenkins
+        state: import
+        target: /home/thyler/odataProjects/nodeJS_CRUD/database.sql
+
+    - name: Copy .env.server contents to .env
       copy:
         src: /home/thyler/odataProjects/nodeJS_CRUD/.env.server
         dest: /home/thyler/odataProjects/nodeJS_CRUD/.env
-        #remote_src: true
+        remote_src: true
