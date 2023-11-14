@@ -4,16 +4,19 @@
   become: yes
 
   tasks:
-    - name: Clone Git Repository
-      git:
-        repo: https://github.com/odataProjects/nodeJS_CRUD.git
-        dest: /home/thyler/odataProjects/nodeJS_CRUD
-        version: main
+    - name: Copy from WorkSpace to odataProjects
+      copy:
+        src: /var/lib/jenkins/workspace/nodeJS_CRUD
+        dest: /home/thyler/odataProjects/
+        remote_src: true
 
-    - name: Install Node.js dependencies
-      command: npm install
-      args:
-        chdir: /home/thyler/odataProjects/nodeJS_CRUD
+    - name: Create service file
+      template:
+        src: nodeJS_CRUD.j2  
+        dest: /etc/systemd/system/nodeJS_CRUD.service
+      notify:
+        - Reload systemd
+        - Restart service after daemon_reload
 
     - name: Check if database exists
       mysql_db:
@@ -28,32 +31,24 @@
         state: import
         target: /home/thyler/odataProjects/nodeJS_CRUD/database.sql
 
-    - name: Create service file
-      template:
-        src: nodeJS_CRUD.j2  
-        dest: /etc/systemd/system/nodeJS_CRUD.service
-      notify:
-        - Reload systemd
-
     - name: Start and enable service
       systemd:
         name: nodeJS_CRUD
         enabled: yes
         state: started
 
+  handlers:
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
     - name: Restart service after daemon_reload
       systemd:
         name: nodeJS_CRUD
         state: restarted
-      notify:
-        - Reload systemd
 
     - name: Copy .env.server to .env
       copy:
         src: /home/thyler/odataProjects/nodeJS_CRUD/.env.server
         dest: /home/thyler/odataProjects/nodeJS_CRUD/.env
-
-  handlers:
-    - name: Reload systemd
-      systemd:
-        daemon_reload: yes
+        remote_src: true
