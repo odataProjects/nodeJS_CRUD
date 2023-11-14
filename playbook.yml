@@ -8,7 +8,7 @@
       copy:
         src: /var/lib/jenkins/workspace/nodeJS_CRUD
         dest: /home/thyler/odataProjects/
-        remote_src: true
+        #remote_src: true
 
     - name: Create service file
       template:
@@ -51,4 +51,4 @@
       copy:
         src: /home/thyler/odataProjects/nodeJS_CRUD/.env.server
         dest: /home/thyler/odataProjects/nodeJS_CRUD/.env
-        remote_src: true
+        #remote_src: true
