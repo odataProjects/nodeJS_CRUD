@@ -28,11 +28,6 @@
       systemd:
         daemon_reload: yes
 
-    - name: Restart service
-      systemd:
-        name: nodeJS_CRUD
-        state: restarted
-
     - name: Check if the database exists
       mysql_db:
         name: nodeJenkins
@@ -51,3 +46,8 @@
         src: /home/thyler/odataProjects/nodeJS_CRUD/.env.server
         dest: /home/thyler/odataProjects/nodeJS_CRUD/.env
         remote_src: true
+    
+    - name: Restart service
+      systemd:
+        name: nodeJS_CRUD
+        state: restarted
