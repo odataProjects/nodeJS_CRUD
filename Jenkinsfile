@@ -1,5 +1,5 @@
 pipeline {
-    agent php-agent
+    agent any
 
     tools {
         nodejs 'NodeJSTool_21'
