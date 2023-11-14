@@ -16,7 +16,7 @@
         dest: /etc/systemd/system/nodeJS_CRUD.service
       notify:
         - Reload systemd
-        - Restart service after daemon_reload
+        - Restart service
 
     - name: Check if database exists
       mysql_db:
@@ -42,7 +42,7 @@
       systemd:
         daemon_reload: yes
 
-    - name: Restart service after daemon_reload
+    - name: Restart service
       systemd:
         name: nodeJS_CRUD
         state: restarted
