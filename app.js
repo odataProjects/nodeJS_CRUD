@@ -76,7 +76,7 @@ app.delete('/delEmployee/:id', (req, res) => {
 
 
 
-/*app.get('/getSalaire', (req, res) => {
+app.get('/getSalaire', (req, res) => {
     conn.query('SELECT MAX(salaire_employee) as max, MIN(salaire_employee) as min FROM Employee', (err, results) => {
         if (err) {
             //console.error('Error executing query:', err);
@@ -84,6 +84,6 @@ app.delete('/delEmployee/:id', (req, res) => {
         }
         res.send(results)
     });
-});*/
+});
 
 module.exports = app;
